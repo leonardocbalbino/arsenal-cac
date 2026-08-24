@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CategoriaCac {
+  ATIRADOR
+  CACADOR
+  COLECIONADOR
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CategoriaArma {
+  PERMITIDA
+  RESTRITA
+}
+
+enum TipoDocumento {
+  CR
+  CRAF
+  GUIA_TRAFEGO
+  ATESTADO_SANIDADE
+  EXAME_PSICOLOGICO
+  COMPROVANTE_RESIDENCIA
+  TITULO_FILIACAO
+  OUTRO
+}
+
+enum EntidadeAlvo {
+  PERFIL
+  ARMA
+  CLUBE
+}
+
+model Usuario {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  senhaHash    String
+  nome         String
+  crNumero     String?
+  crValidade   DateTime?
+  categoriaCac CategoriaCac?
+  fotoUrl      String?
+  role         Role     @default(USER)
+  metaHabitualidade Int?
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  armas         Arma[]
+  documentos    Documento[]
+  filiacoes     Filiacao[]
+  sessoesTreino SessaoTreino[]
+  municoes      Municao[]
+  alertas       Alerta[]
+
+  @@map("usuarios")
+}
+
+model Arma {
+  id           String        @id @default(uuid())
+  usuarioId    String
+  usuario      Usuario       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  marca        String
+  modelo       String
+  calibre      String
+  numeroSerie  String
+  categoria    CategoriaArma
+  crafNumero   String?
+  crafValidade DateTime?
+  fotoUrl      String?
+  ativa        Boolean       @default(true)
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+
+  documentos      Documento[]
+  municoes        Municao[]
+  sessoesTreinoArmas SessaoTreinoArma[]
+  manutencoes     Manutencao[]
+
+  @@unique([usuarioId, numeroSerie])
+  @@map("armas")
+}
+
+model Manutencao {
+  id          String   @id @default(uuid())
+  armaId      String
+  arma        Arma     @relation(fields: [armaId], references: [id], onDelete: Cascade)
+  data        DateTime
+  descricao   String
+  custo       Decimal? @db.Decimal(10, 2)
+  criadoEm    DateTime @default(now())
+
+  @@map("manutencoes")
+}
+
+model Documento {
+  id              String        @id @default(uuid())
+  usuarioId       String
+  usuario         Usuario       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  tipo            TipoDocumento
+  numero          String?
+  entidadeAlvo    EntidadeAlvo
+  armaId          String?
+  arma            Arma?         @relation(fields: [armaId], references: [id], onDelete: Cascade)
+  clubeId         String?
+  clube           Clube?        @relation(fields: [clubeId], references: [id], onDelete: SetNull)
+  dataEmissao     DateTime?
+  dataValidade    DateTime?
+  arquivoUrl      String?
+  observacoes     String?
+  criadoEm        DateTime      @default(now())
+  atualizadoEm    DateTime      @updatedAt
+
+  alertas Alerta[]
+
+  @@map("documentos")
+}
+
+model Clube {
+  id       String   @id @default(uuid())
+  nome     String
+  cbte     String?
+  cidade   String?
+  uf       String?
+  criadoEm DateTime @default(now())
+
+  filiacoes     Filiacao[]
+  documentos    Documento[]
+  sessoesTreino SessaoTreino[]
+
+  @@map("clubes")
+}
+
+model Filiacao {
+  id           String   @id @default(uuid())
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  clubeId      String
+  clube        Clube    @relation(fields: [clubeId], references: [id], onDelete: Cascade)
+  numeroSocio  String?
+  dataFiliacao DateTime?
+  dataValidade DateTime?
+  ativa        Boolean  @default(true)
+  criadoEm     DateTime @default(now())
+
+  @@unique([usuarioId, clubeId])
+  @@map("filiacoes")
+}
+
+model SessaoTreino {
+  id             String   @id @default(uuid())
+  usuarioId      String
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  clubeId        String?
+  clube          Clube?   @relation(fields: [clubeId], references: [id], onDelete: SetNull)
+  data           DateTime
+  municaoGastaQtd Int?
+  comprovanteUrl String?
+  observacoes    String?
+  criadoEm       DateTime @default(now())
+
+  armas SessaoTreinoArma[]
+
+  @@map("sessoes_treino")
+}
+
+model SessaoTreinoArma {
+  id             String       @id @default(uuid())
+  sessaoTreinoId String
+  sessaoTreino   SessaoTreino @relation(fields: [sessaoTreinoId], references: [id], onDelete: Cascade)
+  armaId         String
+  arma           Arma         @relation(fields: [armaId], references: [id], onDelete: Cascade)
+
+  @@unique([sessaoTreinoId, armaId])
+  @@map("sessoes_treino_armas")
+}
+
+model Municao {
+  id           String   @id @default(uuid())
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  armaId       String?
+  arma         Arma?    @relation(fields: [armaId], references: [id], onDelete: SetNull)
+  calibre      String
+  tipoMovimento String  // COMPRA | USO
+  quantidade   Int
+  lote         String?
+  data         DateTime
+  notaFiscalUrl String?
+  observacoes  String?
+  criadoEm     DateTime @default(now())
+
+  @@map("municoes")
+}
+
+model Alerta {
+  id                String    @id @default(uuid())
+  usuarioId         String
+  usuario           Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  documentoId        String
+  documento          Documento @relation(fields: [documentoId], references: [id], onDelete: Cascade)
+  diasAntecedencia   Int
+  ativo              Boolean   @default(true)
+  ultimoDisparoEm    DateTime?
+  criadoEm           DateTime  @default(now())
+
+  @@map("alertas")
+}

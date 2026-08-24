@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"></helmet>
+<div style="position:relative;height:100%;display:flex;flex-direction:column;background:#0D0F0E;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#ECEFEC;overflow:hidden">
+  <div style="flex:1;overflow:auto">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:18px;padding:64px 20px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:22px;font-weight:600;letter-spacing:-.02em">Leonardo A.</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(236,239,236,.45)">CR 128.446-1 · ATIRADOR · 3º NÍVEL</div>
+        </div>
+        <div style="width:42px;height:42px;border-radius:12px;background:#1B201D;border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(236,239,236,.6)">LA</div>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,#171B19,#131614);border-radius:18px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Habitualidade</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#4E9C82"><span style="width:6px;height:6px;border-radius:99px;background:#4E9C82;display:block"></span>Em dia</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px">
+          <div style="font-size:44px;font-weight:600;line-height:.9;letter-spacing:-.03em">4</div>
+          <div style="font-size:14px;color:rgba(236,239,236,.5);padding-bottom:4px">/ 4 sessões no semestre</div>
+        </div>
+        <div style="display:flex;gap:5px">
+          <div style="flex:1;height:6px;border-radius:99px;background:#1F5C4A"></div>
+          <div style="flex:1;height:6px;border-radius:99px;background:#1F5C4A"></div>
+          <div style="flex:1;height:6px;border-radius:99px;background:#1F5C4A"></div>
+          <div style="flex:1;height:6px;border-radius:99px;background:#1F5C4A"></div>
+        </div>
+        <div style="font-size:12px;color:rgba(236,239,236,.45)">Semestre encerra em 30 set 2026 · comprovante gerado automaticamente</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div onClick="{{ onSheet }}" style="cursor:pointer;background:#1F5C4A;color:#EAF3EF;border-radius:14px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:88px;justify-content:space-between" style-hover="background:#26705a">
+          <div style="font-size:18px;font-weight:600">+</div>
+          <div style="font-size:12.5px;font-weight:600;line-height:1.25">Registrar<br>treino</div>
+        </div>
+        <div onClick="{{ onWallet }}" style="cursor:pointer;background:#1B201D;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:88px;justify-content:space-between" style-hover="background:#222926">
+          <div style="width:16px;height:11px;border:1.5px solid rgba(236,239,236,.7);border-radius:2px"></div>
+          <div style="font-size:12.5px;font-weight:500;line-height:1.25;color:rgba(236,239,236,.85)">Carteiras</div>
+        </div>
+        <div onClick="{{ onDocs }}" style="cursor:pointer;background:#1B201D;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:88px;justify-content:space-between" style-hover="background:#222926">
+          <div style="width:12px;height:15px;border:1.5px solid rgba(236,239,236,.7);border-radius:2px"></div>
+          <div style="font-size:12.5px;font-weight:500;line-height:1.25;color:rgba(236,239,236,.85)">Documentos</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Vencimentos</div>
+          <div onClick="{{ onVenc }}" style="cursor:pointer;font-size:12px;color:#4E9C82;font-weight:500">Ver todos</div>
+        </div>
+
+        <div onClick="{{ onVenc }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid #C4694E;border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Guia de Tráfego · .38 SPL</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">21 AGO 2026 · Taurus RT85</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#D97F62;white-space:nowrap">9 dias</div>
+        </div>
+
+        <div onClick="{{ onVenc }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid #B08300;border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Filiação · Clube de Tiro Aldeia</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">03 OUT 2026 · sócio 4172</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#C9A227;white-space:nowrap">52 dias</div>
+        </div>
+
+        <div onClick="{{ onVenc }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid rgba(255,255,255,.14);border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">CR · Certificado de Registro</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">12 MAR 2027 · renovação em 10 anos</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.4);white-space:nowrap">7 meses</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Munição em estoque</div>
+          <div onClick="{{ onMuni }}" style="cursor:pointer;font-size:12px;color:#4E9C82;font-weight:500">Ver todos</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div onClick="{{ onMuni }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 12px 11px;display:flex;flex-direction:column;gap:5px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.45)">.38 SPL</div>
+            <div style="font-size:19px;font-weight:600;letter-spacing:-.02em">240</div>
+            <div style="font-size:10.5px;color:rgba(236,239,236,.35)">limite 1.000</div>
+          </div>
+          <div onClick="{{ onMuni }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 12px 11px;display:flex;flex-direction:column;gap:5px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.45)">9×19</div>
+            <div style="font-size:19px;font-weight:600;letter-spacing:-.02em">480</div>
+            <div style="font-size:10.5px;color:rgba(236,239,236,.35)">limite 1.000</div>
+          </div>
+          <div onClick="{{ onMuni }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 12px 11px;display:flex;flex-direction:column;gap:5px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.45)">.22 LR</div>
+            <div style="font-size:19px;font-weight:600;letter-spacing:-.02em">1.100</div>
+            <div style="font-size:10.5px;color:rgba(236,239,236,.35)">limite 5.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isHab }}">
+    <div style="display:flex;flex-direction:column;gap:18px;padding:64px 20px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.025em">Habitualidade</div>
+        <div onClick="{{ onSheet }}" style="cursor:pointer;width:38px;height:38px;border-radius:99px;background:#1F5C4A;color:#EAF3EF;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;line-height:1" style-hover="background:#26705a">+</div>
+      </div>
+
+      <div style="display:flex;gap:4px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:4px">
+        <div onClick="{{ onSemestre }}" style="flex:1;text-align:center;padding:8px 0;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;background:{{ semBg }};color:{{ semFg }}">Semestre atual</div>
+        <div onClick="{{ onAno }}" style="flex:1;text-align:center;padding:8px 0;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;background:{{ anoBg }};color:{{ anoFg }}">Últimos 12 meses</div>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,.09);background:#131614;border-radius:18px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Sessões registradas</div>
+            <div style="font-size:15px;font-weight:500">{{ habCount }} sessões · {{ habShots }} disparos</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#4E9C82;padding-bottom:2px">EM DIA</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:6px;height:104px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:28px;background:#2a3230;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">SET</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:54px;background:#2a3230;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">OUT</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:14px;background:#2a3230;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">NOV</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:40px;background:#2a3230;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">DEZ</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:62px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">JAN</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:34px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">FEV</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:78px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">MAR</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:20px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">ABR</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:46px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">MAI</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:66px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">JUN</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:30px;background:#1F5C4A;border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.35)">JUL</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:100%;height:12px;background:rgba(31,92,74,.5);border-radius:4px"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(236,239,236,.55)">AGO</div></div>
+        </div>
+      </div>
+
+      <div onClick="{{ onPdf }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#131614;border:1px dashed rgba(78,156,130,.45);border-radius:14px;padding:14px" style-hover="background:#171B19">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:14px;font-weight:500">Comprovante de habitualidade</div>
+          <div style="font-size:11.5px;color:rgba(236,239,236,.45)">PDF do semestre · pronto para fiscalização</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#4E9C82;white-space:nowrap">GERAR</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45);padding-bottom:8px">Sessões</div>
+
+        <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:42px;flex:none;display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.02em">04</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(236,239,236,.4)">AGO</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Clube de Tiro Aldeia</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">9×19 · 50 disparos · 19h10</div>
+          </div>
+          <div style="align-self:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px">PDF</div>
+        </div>
+
+        <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:42px;flex:none;display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.02em">22</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(236,239,236,.4)">JUL</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Clube de Tiro Aldeia</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">.38 SPL · 30 disparos · 10h40</div>
+          </div>
+          <div style="align-self:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px">PDF</div>
+        </div>
+
+        <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:42px;flex:none;display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.02em">09</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(236,239,236,.4)">JUL</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Clube Rio Bonito</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">.22 LR · 120 disparos · 14h05</div>
+          </div>
+          <div style="align-self:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(236,239,236,.35);border:1px solid rgba(255,255,255,.14);border-radius:5px;padding:3px 6px">SEM PDF</div>
+        </div>
+
+        <div style="display:flex;gap:14px;padding:13px 0">
+          <div style="width:42px;flex:none;display:flex;flex-direction:column;align-items:center;gap:1px">
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.02em">18</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(236,239,236,.4)">JUN</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Clube de Tiro Aldeia</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">9×19 · 80 disparos · 20h00</div>
+          </div>
+          <div style="align-self:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px">PDF</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isArsenal }}">
+    <div style="display:flex;flex-direction:column;gap:16px;padding:64px 20px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.025em">Arsenal</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.4)">4 ARMAS</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:11px 13px">
+        <div style="width:11px;height:11px;border:1.5px solid rgba(236,239,236,.4);border-radius:99px"></div>
+        <div style="font-size:13.5px;color:rgba(236,239,236,.35)">Buscar por modelo, calibre ou SIGMA</div>
+      </div>
+
+      <div onClick="{{ onWeapon }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:13px" style-hover="background:#171B19">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:16px;font-weight:600;letter-spacing:-.01em">Taurus TH9</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">PISTOLA · 9×19 · SIGMA 8841-2277</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px;white-space:nowrap">GUIA OK</div>
+        </div>
+        <div style="height:64px;border-radius:10px;background:repeating-linear-gradient(115deg,#191E1B 0 9px,#1E2421 9px 18px);display:flex;align-items:center;justify-content:center">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:rgba(236,239,236,.3)">FOTO DA ARMA</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">
+          <span>GT ATÉ 14 FEV 2027</span><span>MANUT. 03/2026</span>
+        </div>
+      </div>
+
+      <div onClick="{{ onWeapon }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.09);border-left:2px solid #C4694E;border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:11px" style-hover="background:#171B19">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:16px;font-weight:600;letter-spacing:-.01em">Taurus RT85</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">REVÓLVER · .38 SPL · SIGMA 7712-9034</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#D97F62;border:1px solid rgba(217,127,98,.45);border-radius:5px;padding:3px 6px;white-space:nowrap">GT 9 DIAS</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">
+          <span>GT ATÉ 21 AGO 2026</span><span>MANUT. 11/2025</span>
+        </div>
+      </div>
+
+      <div onClick="{{ onWeapon }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:11px" style-hover="background:#171B19">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:16px;font-weight:600;letter-spacing:-.01em">CBC 8022</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">CARABINA · .22 LR · SIGMA 5520-1188</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px;white-space:nowrap">GUIA OK</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">
+          <span>GT ATÉ 02 JUN 2028</span><span>MANUT. 01/2026</span>
+        </div>
+      </div>
+
+      <div onClick="{{ onWeapon }}" style="cursor:pointer;background:#131614;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:11px" style-hover="background:#171B19">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:16px;font-weight:600;letter-spacing:-.01em">Boito Reuna</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">ESPINGARDA · CAL. 12 · SIGMA 3390-4471</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#C9A227;border:1px solid rgba(201,162,39,.42);border-radius:5px;padding:3px 6px;white-space:nowrap">EM MANUT.</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">
+          <span>GT ATÉ 30 NOV 2027</span><span>OFICINA · 06/2026</span>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isMuni }}">
+    <div style="display:flex;flex-direction:column;gap:17px;padding:64px 20px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.025em">Munição</div>
+        <div onClick="{{ onUpload }}" style="cursor:pointer;width:38px;height:38px;border-radius:99px;background:#1F5C4A;color:#EAF3EF;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;line-height:1" style-hover="background:#26705a">+</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em">9×19</div>
+            <div style="font-size:15px;font-weight:600">480 <span style="font-size:11.5px;font-weight:400;color:rgba(236,239,236,.4)">/ 1.000</span></div>
+          </div>
+          <div style="height:5px;border-radius:99px;background:#222825;overflow:hidden"><div style="width:48%;height:100%;background:#1F5C4A"></div></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">ÚLT. COMPRA 12 JUL · CONSUMO MÉDIO 65/MÊS</div>
+        </div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em">.38 SPL</div>
+            <div style="font-size:15px;font-weight:600">240 <span style="font-size:11.5px;font-weight:400;color:rgba(236,239,236,.4)">/ 1.000</span></div>
+          </div>
+          <div style="height:5px;border-radius:99px;background:#222825;overflow:hidden"><div style="width:24%;height:100%;background:#C9A227"></div></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#C9A227">ESTOQUE BAIXO · 4 SESSÕES RESTANTES</div>
+        </div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em">.22 LR</div>
+            <div style="font-size:15px;font-weight:600">1.100 <span style="font-size:11.5px;font-weight:400;color:rgba(236,239,236,.4)">/ 5.000</span></div>
+          </div>
+          <div style="height:5px;border-radius:99px;background:#222825;overflow:hidden"><div style="width:22%;height:100%;background:#1F5C4A"></div></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4)">ÚLT. COMPRA 02 MAI · CONSUMO MÉDIO 120/MÊS</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45);padding-bottom:8px">Movimentações</div>
+
+        <div style="display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:22px;flex:none;text-align:center;font-size:15px;color:#4E9C82">+</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Compra · 200 un. 9×19</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">12 JUL 2026 · NF 44.921 · R$ 780,00</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px">NF</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:22px;flex:none;text-align:center;font-size:15px;color:rgba(236,239,236,.4)">−</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Uso em treino · 50 un. 9×19</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">04 AGO 2026 · Clube de Tiro Aldeia</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="width:22px;flex:none;text-align:center;font-size:15px;color:rgba(236,239,236,.4)">−</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Uso em treino · 30 un. .38 SPL</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">22 JUL 2026 · Clube de Tiro Aldeia</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:13px;padding:12px 0">
+          <div style="width:22px;flex:none;text-align:center;font-size:15px;color:#4E9C82">+</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Compra · 500 un. .22 LR</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">02 MAI 2026 · NF 41.077 · R$ 410,00</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:#4E9C82;border:1px solid rgba(78,156,130,.4);border-radius:5px;padding:3px 6px">NF</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isVenc }}">
+    <div style="display:flex;flex-direction:column;gap:18px;padding:64px 20px 24px">
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div onClick="{{ onHome }}" style="cursor:pointer;font-size:13.5px;color:#4E9C82;font-weight:500">‹ Início</div>
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.025em">Vencimentos</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:11px;background:rgba(31,92,74,.14);border:1px solid rgba(78,156,130,.28);border-radius:13px;padding:13px 14px">
+        <div style="width:7px;height:7px;border-radius:99px;background:#4E9C82;flex:none"></div>
+        <div style="flex:1;font-size:12.5px;line-height:1.45;color:rgba(236,239,236,.75)">Avisos locais em 30, 15 e 7 dias antes de cada prazo</div>
+        <div style="width:38px;height:22px;border-radius:99px;background:#1F5C4A;padding:2px;box-sizing:border-box;display:flex;justify-content:flex-end"><div style="width:18px;height:18px;border-radius:99px;background:#EAF3EF"></div></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#D97F62">Neste mês</div>
+        <div style="background:#131614;border:1px solid rgba(217,127,98,.3);border-left:2px solid #C4694E;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <div style="font-size:14.5px;font-weight:500">Guia de Tráfego · .38 SPL</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">21 AGO 2026 · Taurus RT85</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#D97F62;white-space:nowrap">9 dias</div>
+          </div>
+          <div onClick="{{ onPdf }}" style="cursor:pointer;align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;color:#EAF3EF;background:#1F5C4A;border-radius:7px;padding:8px 11px">INICIAR RENOVAÇÃO</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C9A227">Próximos 90 dias</div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid #B08300;border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Filiação · Clube de Tiro Aldeia</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">03 OUT 2026 · sócio 4172</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#C9A227;white-space:nowrap">52 dias</div>
+        </div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid #B08300;border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Registro de atirador · CBTE</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">30 SET 2026 · AT-90233</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#C9A227;white-space:nowrap">49 dias</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Depois</div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid rgba(255,255,255,.14);border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Laudo psicológico</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">28 JAN 2027</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.4);white-space:nowrap">5 meses</div>
+        </div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid rgba(255,255,255,.14);border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">CR · Certificado de Registro</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">12 MAR 2027</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.4);white-space:nowrap">7 meses</div>
+        </div>
+        <div style="background:#131614;border:1px solid rgba(255,255,255,.08);border-left:2px solid rgba(255,255,255,.14);border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Guia de Tráfego · 9×19</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">14 FEV 2027 · Taurus TH9</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.4);white-space:nowrap">6 meses</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isDocs }}">
+    <div style="display:flex;flex-direction:column;gap:16px;padding:64px 20px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.025em">Documentos</div>
+        <div onClick="{{ onUpload }}" style="cursor:pointer;width:38px;height:38px;border-radius:99px;background:#1B201D;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(236,239,236,.8);line-height:1" style-hover="background:#222926">+</div>
+      </div>
+
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#EAF3EF;background:#1F5C4A;border-radius:99px;padding:6px 11px">TODOS · 11</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.55);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:6px 11px">CR</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.55);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:6px 11px">GUIAS</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.55);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:6px 11px">CLUBE</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.55);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:6px 11px">PSICO</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:13px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px 14px">
+          <div style="width:32px;height:40px;flex:none;border-radius:4px;background:repeating-linear-gradient(115deg,#1B201D 0 6px,#20261F 6px 12px);border:1px solid rgba(255,255,255,.1)"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">CR — frente e verso</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">PDF · 1,8 MB · val. 12 MAR 2027</div>
+          </div>
+          <div style="font-size:16px;color:rgba(236,239,236,.3)">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:13px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px 14px">
+          <div style="width:32px;height:40px;flex:none;border-radius:4px;background:repeating-linear-gradient(115deg,#1B201D 0 6px,#20261F 6px 12px);border:1px solid rgba(255,255,255,.1)"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Guia de Tráfego — RT85</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#D97F62">PDF · 640 KB · vence em 9 dias</div>
+          </div>
+          <div style="font-size:16px;color:rgba(236,239,236,.3)">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:13px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px 14px">
+          <div style="width:32px;height:40px;flex:none;border-radius:4px;background:repeating-linear-gradient(115deg,#1B201D 0 6px,#20261F 6px 12px);border:1px solid rgba(255,255,255,.1)"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Declaração de filiação — CBTE</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">PDF · 320 KB · val. 03 OUT 2026</div>
+          </div>
+          <div style="font-size:16px;color:rgba(236,239,236,.3)">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:13px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px 14px">
+          <div style="width:32px;height:40px;flex:none;border-radius:4px;background:repeating-linear-gradient(115deg,#1B201D 0 6px,#20261F 6px 12px);border:1px solid rgba(255,255,255,.1)"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Laudo psicológico</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">JPG · 2,4 MB · val. 28 JAN 2027</div>
+          </div>
+          <div style="font-size:16px;color:rgba(236,239,236,.3)">›</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:13px;background:#131614;border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px 14px">
+          <div style="width:32px;height:40px;flex:none;border-radius:4px;background:repeating-linear-gradient(115deg,#1B201D 0 6px,#20261F 6px 12px);border:1px solid rgba(255,255,255,.1)"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font-size:14px;font-weight:500">Nota fiscal — munição 9×19</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.42)">PDF · 180 KB · 12 JUL 2026</div>
+          </div>
+          <div style="font-size:16px;color:rgba(236,239,236,.3)">›</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isWeapon }}">
+    <div style="display:flex;flex-direction:column;gap:18px;padding:64px 20px 24px">
+      <div onClick="{{ onCloseWeapon }}" style="cursor:pointer;font-size:13.5px;color:#4E9C82;font-weight:500">‹ Arsenal</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font-size:27px;font-weight:600;letter-spacing:-.025em">Taurus TH9</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(236,239,236,.45)">PISTOLA · 9×19 · SIGMA 8841-2277</div>
+      </div>
+      <div style="height:150px;border-radius:14px;background:repeating-linear-gradient(115deg,#191E1B 0 10px,#1E2421 10px 20px);display:flex;align-items:center;justify-content:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(236,239,236,.3)">FOTO DA ARMA</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden">
+        <div style="background:#131614;padding:13px 14px;display:flex;flex-direction:column;gap:4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;color:rgba(236,239,236,.4)">CAPACIDADE</div><div style="font-size:14px">17+1</div></div>
+        <div style="background:#131614;padding:13px 14px;display:flex;flex-direction:column;gap:4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;color:rgba(236,239,236,.4)">CANO</div><div style="font-size:14px">4,25"</div></div>
+        <div style="background:#131614;padding:13px 14px;display:flex;flex-direction:column;gap:4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;color:rgba(236,239,236,.4)">AQUISIÇÃO</div><div style="font-size:14px">18 fev 2024</div></div>
+        <div style="background:#131614;padding:13px 14px;display:flex;flex-direction:column;gap:4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;color:rgba(236,239,236,.4)">GUIA DE TRÁFEGO</div><div style="font-size:14px;color:#4E9C82">14 fev 2027</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(236,239,236,.45)">Histórico de manutenção</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4);width:64px;flex:none;padding-top:2px">03/2026</div>
+          <div style="flex:1;font-size:13.5px;line-height:1.45">Limpeza completa e troca de molas · Oficina Ferraz</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4);width:64px;flex:none;padding-top:2px">09/2025</div>
+          <div style="flex:1;font-size:13.5px;line-height:1.45">Substituição de miras · Oficina Ferraz</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:11px 0">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(236,239,236,.4);width:64px;flex:none;padding-top:2px">02/2024</div>
+          <div style="flex:1;font-size:13.5px;line-height:1.45">Registro inicial no acervo</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div onClick="{{ onPdf }}" style="cursor:pointer;flex:1;text-align:center;background:#1B201D;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;font-size:13.5px;font-weight:500" style-hover="background:#222926">Dossiê PDF</div>
+        <div onClick="{{ onSheet }}" style="cursor:pointer;flex:1;text-align:center;background:#1F5C4A;color:#EAF3EF;border-radius:12px;padding:14px;font-size:13.5px;font-weight:600" style-hover="background:#26705a">Usar em treino</div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:none;display:flex;background:rgba(13,15,14,.94);border-top:1px solid rgba(255,255,255,.08);padding:9px 8px 26px">
+    <div onClick="{{ onHome }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:{{ homeFg }}">
+      <div style="width:17px;height:17px;border:1.6px solid currentColor;border-radius:4px"></div>
+      <div style="font-size:9.5px;font-weight:500">Início</div>
+    </div>
+    <div onClick="{{ onHab }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:{{ habFg }}">
+      <div style="width:17px;height:17px;border:1.6px solid currentColor;border-radius:99px"></div>
+      <div style="font-size:9.5px;font-weight:500">Habitualidade</div>
+    </div>
+    <div onClick="{{ onArsenal }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:{{ arsFg }}">
+      <div style="width:17px;height:6px;border:1.6px solid currentColor;border-radius:2px;margin:5.5px 0"></div>
+      <div style="font-size:9.5px;font-weight:500">Arsenal</div>
+    </div>
+    <div onClick="{{ onMuni }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:{{ muniFg }}">
+      <div style="width:9px;height:17px;border:1.6px solid currentColor;border-radius:5px 5px 2px 2px"></div>
+      <div style="font-size:9.5px;font-weight:500">Munição</div>
+    </div>
+    <div onClick="{{ onDocs }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:{{ docsFg }}">
+      <div style="width:13px;height:17px;border:1.6px solid currentColor;border-radius:2px"></div>
+      <div style="font-size:9.5px;font-weight:500">Docs</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isWallet }}">
+  <div style="position:absolute;inset:0;background:#F4F2EC;z-index:47;display:flex;flex-direction:column;padding:58px 20px 26px;color:#14170F">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(20,23,15,.5)">Modo apresentação · brilho máx.</div>
+      <div onClick="{{ onCloseWallet }}" style="cursor:pointer;width:30px;height:30px;border-radius:99px;background:rgba(20,23,15,.08);display:flex;align-items:center;justify-content:center;font-size:15px">✕</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px">
+      <div style="background:#fff;border:1px solid rgba(20,23,15,.12);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:0 18px 40px rgba(20,23,15,.12)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(20,23,15,.1);padding-bottom:14px">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:rgba(20,23,15,.5)">{{ walletKind }}</div>
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.01em">{{ walletTitle }}</div>
+          </div>
+          <div style="width:52px;height:52px;border-radius:8px;background:repeating-linear-gradient(115deg,#E7E4DA 0 5px,#DCD8CC 5px 10px);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(20,23,15,.45)">QR</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(20,23,15,.45)">NOME</div>
+            <div style="font-size:15px;font-weight:500">Leonardo Almeida</div>
+          </div>
+          <div style="display:flex;gap:22px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(20,23,15,.45)">{{ walletNumLabel }}</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px">{{ walletNum }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(20,23,15,.45)">VALIDADE</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px">{{ walletVal }}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(20,23,15,.45)">EMISSOR</div>
+            <div style="font-size:13.5px">{{ walletIssuer }}</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(20,23,15,.1);padding-top:12px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(20,23,15,.45);line-height:1.5">CÓPIA DIGITAL · CONFERIR ORIGINAL · SINC. 12 AGO 2026 07:41</div>
+      </div>
+      <div style="display:flex;gap:7px;justify-content:center">
+        <div onClick="{{ onWallet0 }}" style="cursor:pointer;width:7px;height:7px;border-radius:99px;background:{{ dot0 }}"></div>
+        <div onClick="{{ onWallet1 }}" style="cursor:pointer;width:7px;height:7px;border-radius:99px;background:{{ dot1 }}"></div>
+        <div onClick="{{ onWallet2 }}" style="cursor:pointer;width:7px;height:7px;border-radius:99px;background:{{ dot2 }}"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <div style="flex:1;text-align:center;background:rgba(20,23,15,.07);border-radius:12px;padding:13px;font-size:13px;font-weight:500">Salvar na Wallet</div>
+      <div onClick="{{ onCloseWallet }}" style="cursor:pointer;flex:1;text-align:center;background:#14170F;color:#F4F2EC;border-radius:12px;padding:13px;font-size:13px;font-weight:600">Concluir</div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:874},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;hab&quot;,&quot;arsenal&quot;,&quot;muni&quot;,&quot;venc&quot;,&quot;docs&quot;,&quot;weapon&quot;,&quot;wallet&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;periodo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;semestre&quot;,&quot;ano&quot;],&quot;default&quot;:&quot;semestre&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;walletIdx&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:2,&quot;tsType&quot;:&quot;number&quot;},&quot;onHome&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onHab&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onArsenal&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onMuni&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onDocs&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onVenc&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onSheet&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onWallet&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onCloseWallet&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onWeapon&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onCloseWeapon&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onPdf&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onUpload&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onSemestre&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onAno&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onWallet0&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onWallet1&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onWallet2&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+const WALLETS = [
+  { kind: "CERTIFICADO DE REGISTRO", title: "CR — Colecionador, Atirador e Caçador", numLabel: "Nº CR", num: "128.446-1", val: "12/03/2027", issuer: "Exército Brasileiro · COLOG" },
+  { kind: "FILIAÇÃO A CLUBE", title: "Clube de Tiro Aldeia", numLabel: "Nº SÓCIO", num: "4172", val: "03/10/2026", issuer: "CBTE · Confederação de Tiro Esportivo" },
+  { kind: "REGISTRO DE ATIRADOR", title: "Atirador Desportivo — 3º nível", numLabel: "Nº REGISTRO", num: "AT-90233", val: "30/09/2026", issuer: "CBTE" },
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const noop = () => {};
+    const screen = p.screen || "home";
+    const on = "#ECEFEC", off = "rgba(236,239,236,.38)";
+    const idx = p.walletIdx || 0;
+    const w = WALLETS[idx] || WALLETS[0];
+    const dot = (i) => (i === idx ? "#14170F" : "rgba(20,23,15,.22)");
+    const semestre = p.periodo !== "ano";
+    return {
+      isHome: screen === "home", isHab: screen === "hab", isArsenal: screen === "arsenal",
+      isDocs: screen === "docs", isMuni: screen === "muni", isVenc: screen === "venc",
+      isWeapon: screen === "weapon", isWallet: screen === "wallet",
+      showTabs: screen !== "wallet" && screen !== "weapon",
+      homeFg: screen === "home" ? on : off,
+      habFg: screen === "hab" ? on : off,
+      arsFg: screen === "arsenal" || screen === "weapon" ? on : off,
+      muniFg: screen === "muni" ? on : off,
+      docsFg: screen === "docs" ? on : off,
+      onHome: p.onHome || noop, onHab: p.onHab || noop, onArsenal: p.onArsenal || noop,
+      onMuni: p.onMuni || noop, onDocs: p.onDocs || noop, onVenc: p.onVenc || noop,
+      onSheet: p.onSheet || noop, onWallet: p.onWallet || noop, onCloseWallet: p.onCloseWallet || noop,
+      onWeapon: p.onWeapon || noop, onCloseWeapon: p.onCloseWeapon || noop,
+      onPdf: p.onPdf || noop, onUpload: p.onUpload || noop,
+      onSemestre: p.onSemestre || noop, onAno: p.onAno || noop,
+      onWallet0: p.onWallet0 || noop, onWallet1: p.onWallet1 || noop, onWallet2: p.onWallet2 || noop,
+      semBg: semestre ? "#1F5C4A" : "transparent", semFg: semestre ? "#EAF3EF" : "rgba(236,239,236,.6)",
+      anoBg: semestre ? "transparent" : "#1F5C4A", anoFg: semestre ? "rgba(236,239,236,.6)" : "#EAF3EF",
+      habCount: semestre ? "4" : "11", habShots: semestre ? "160" : "690",
+      walletKind: w.kind, walletTitle: w.title, walletNumLabel: w.numLabel,
+      walletNum: w.num, walletVal: w.val, walletIssuer: w.issuer,
+      dot0: dot(0), dot1: dot(1), dot2: dot(2),
+    };
+  }
+}
+</script>
+</body>
+</html>

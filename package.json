@@ -1,0 +1,13 @@
+{
+  "name": "cac-app",
+  "private": true,
+  "scripts": {
+    "backend:dev": "pnpm --filter cac-backend start:dev",
+    "backend:build": "pnpm --filter cac-backend build",
+    "mobile:start": "pnpm --filter cac-mobile start",
+    "web:dev": "pnpm --filter cac-web dev",
+    "web:build": "pnpm --filter cac-web build",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down"
+  }
+}

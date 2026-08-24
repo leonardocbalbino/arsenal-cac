@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "CAC App",
+    "slug": "cac-app",
+    "version": "1.0.0",
+    "scheme": "cacapp",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cacapp.mobile",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Usamos autenticação biométrica para proteger seus dados de arsenal e documentos."
+      }
+    },
+    "android": {
+      "package": "com.cacapp.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#0F172A"
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Usamos autenticação biométrica para proteger seus dados de arsenal e documentos."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Precisamos de acesso às fotos para anexar imagens de documentos e armas."
+        }
+      ],
+      "expo-font",
+      "@react-native-community/datetimepicker"
+    ]
+  }
+}

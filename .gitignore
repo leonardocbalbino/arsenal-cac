@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.log
+.expo/
+dist/
+uploads/
+!uploads/.gitkeep
+ios/
+android/
+.DS_Store

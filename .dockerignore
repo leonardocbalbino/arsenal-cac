@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/.next
+**/.expo
+**/.turbo
+**/coverage
+.git
+.github
+*.log
+.DS_Store
+backend/uploads
+!backend/uploads/.gitkeep
+CAC App mobile design
+# Arquivo de cache incremental do tsc — se vazar pro contexto de build, o tsc
+# pode achar que um arquivo já está compilado e pular a emissão sem o output
+# real existir na imagem. Sempre gerar do zero dentro do container.
+**/*.tsbuildinfo

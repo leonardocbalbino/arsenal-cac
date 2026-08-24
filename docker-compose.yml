@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: cac-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cac
+      POSTGRES_PASSWORD: cac_dev_password
+      POSTGRES_DB: cac_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - cac_db_data:/var/lib/postgresql/data
+
+volumes:
+  cac_db_data:

@@ -1,0 +1,100 @@
+name: arsenal-cac-validacao
+
+# Stack de validação com clientes, para rodar no MESMO servidor do
+# cartao-colaborativa. É um stack Docker isolado (rede, volumes e nomes de
+# projeto próprios — Compose usa o nome do diretório, "cac-app", como
+# namespace) e não depende do nginx/DNS já configurados pro
+# cartao-colaborativa: acesso é direto por IP, numa porta dedicada
+# (PUBLIC_PORT, padrão 8090), sem tocar em nada que já está no ar.
+#
+# Uso típico no servidor (dentro da pasta do repo, ao lado deste arquivo):
+#   cp .env.docker.example .env   # preencher POSTGRES_PASSWORD, JWT_SECRET,
+#                                 # DATABASE_URL e NEXT_PUBLIC_API_URL (com o
+#                                 # IP público do servidor)
+#   docker compose -f docker-compose.prod.yml build
+#   docker compose -f docker-compose.prod.yml run --rm migrate
+#   docker compose -f docker-compose.prod.yml up -d
+#
+# Depois que o cliente validar e vocês tiverem domínio/DNS pra este projeto,
+# dá pra aposentar o serviço `nginx` daqui e plugar o host num vhost real —
+# ver deploy/nginx-prod.conf do cartao-colaborativa como referência.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cac}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-cac_app}
+    volumes:
+      - cac_prod_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-cac}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Sem "ports:" de propósito — só acessível dentro da rede do compose,
+    # pra não brigar com o Postgres do cartao-colaborativa (porta 5432) no
+    # mesmo servidor.
+
+  # Serviço one-off: `docker compose -f docker-compose.prod.yml run --rm migrate`
+  # — usa o estágio `compiled` (que ainda tem o CLI do Prisma, removido da
+  # imagem de runtime pelo `pnpm prune --prod`).
+  migrate:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: compiled
+    profiles: ['tools']
+    pull_policy: build
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?defina DATABASE_URL}
+    working_dir: /app/backend
+    command: ['pnpm', 'exec', 'prisma', 'migrate', 'deploy']
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?defina DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      PORT: 3000
+    volumes:
+      - cac_prod_uploads:/app/backend/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL:?defina NEXT_PUBLIC_API_URL, ex: http://SEU_IP:8090/api}"
+    restart: unless-stopped
+    depends_on:
+      - api
+
+  # Único ponto de entrada do stack: só ele publica porta no host. Web e API
+  # ficam acessíveis por trás dele (/ e /api, ver deploy/nginx-validacao.conf).
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./deploy/nginx-validacao.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - '${PUBLIC_PORT:-8090}:80'
+    depends_on:
+      - api
+      - web
+
+volumes:
+  cac_prod_db_data:
+  cac_prod_uploads:
