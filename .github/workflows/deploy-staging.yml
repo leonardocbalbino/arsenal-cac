@@ -1,0 +1,110 @@
+name: Deploy (staging)
+
+# Deploy pra staging quando o PR recebe a label "staging" (ou ganha novos
+# commits enquanto já tem a label). Build completo roda aqui no GitHub
+# Actions — a VPS só recebe os artefatos prontos via rsync. Pra reativar
+# depois de um push, tire e recoloque a label.
+#
+# Mesma VPS do cartao-colaborativa (e do prod deste app), pasta e portas
+# separadas — ver deploy/README.md.
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+env:
+  REMOTE_BASE: /var/www/projetos/repo/arsenal-cac/staging
+  NEXT_PUBLIC_API_URL: https://dev.arsenal.cartaocolaborativa.com.br/api
+
+jobs:
+  build-and-deploy:
+    if: contains(github.event.pull_request.labels.*.name, 'staging')
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Gerar Prisma Client
+        run: pnpm --filter cac-backend exec prisma generate
+
+      - name: Build — backend
+        run: pnpm --filter cac-backend build
+
+      - name: Rodar migrations
+        run: pnpm --filter cac-backend exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
+
+      - name: Build — web
+        run: pnpm --filter cac-web build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
+
+      - name: Remover devDependencies do artefato (node_modules hoisted do workspace)
+        run: pnpm prune --prod
+
+      - name: Configurar SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Adicionar VPS aos known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.VPS_SSH_PORT || 22 }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Definir timestamp da release
+        id: ts
+        run: echo "ts=$(date +%Y%m%d%H%M%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Enviar artefatos pro VPS
+        env:
+          SSH_PORT: ${{ secrets.VPS_SSH_PORT || 22 }}
+          DEST: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}
+        run: |
+          ssh -p "$SSH_PORT" ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "mkdir -p '${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}/api' '${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}/web' '${{ env.REMOTE_BASE }}/shared/uploads'"
+
+          rsync -az -e "ssh -p $SSH_PORT" node_modules package.json "$DEST/"
+
+          rsync -az -e "ssh -p $SSH_PORT" backend/node_modules "$DEST/api/"
+          rsync -az -e "ssh -p $SSH_PORT" backend/dist backend/prisma backend/package.json "$DEST/api/"
+
+          rsync -az -e "ssh -p $SSH_PORT" web/node_modules "$DEST/web/"
+          rsync -az -e "ssh -p $SSH_PORT" web/.next web/public web/package.json web/next.config.ts "$DEST/web/"
+
+      - name: Ativar release (symlink atômico + pm2 reload sem downtime)
+        env:
+          SSH_PORT: ${{ secrets.VPS_SSH_PORT || 22 }}
+        run: |
+          ssh -p "$SSH_PORT" ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s -- \
+            "${{ env.REMOTE_BASE }}" "${{ steps.ts.outputs.ts }}" <<'EOF'
+          set -euo pipefail
+          BASE="$1"; TS="$2"
+
+          ln -sfn ../../../shared/uploads "$BASE/releases/$TS/api/uploads"
+
+          ln -sfn "$BASE/releases/$TS" "$BASE/current"
+
+          pm2 startOrReload "$BASE/ecosystem.staging.config.js"
+          pm2 save
+
+          cd "$BASE/releases" && ls -1t | tail -n +4 | xargs -r rm -rf
+          EOF

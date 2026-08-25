@@ -1,9 +1,8 @@
 name: arsenal-cac-validacao
 
-# Stack de validação com clientes, para rodar no MESMO servidor do
+# Stack de validação com clientes, pra rodar no MESMO servidor do
 # cartao-colaborativa. É um stack Docker isolado (rede, volumes e nomes de
-# projeto próprios — Compose usa o nome do diretório, "cac-app", como
-# namespace) e não depende do nginx/DNS já configurados pro
+# projeto próprios) e não depende do nginx/DNS já configurados pro
 # cartao-colaborativa: acesso é direto por IP, numa porta dedicada
 # (PUBLIC_PORT, padrão 8090), sem tocar em nada que já está no ar.
 #
@@ -15,9 +14,11 @@ name: arsenal-cac-validacao
 #   docker compose -f docker-compose.prod.yml run --rm migrate
 #   docker compose -f docker-compose.prod.yml up -d
 #
-# Depois que o cliente validar e vocês tiverem domínio/DNS pra este projeto,
-# dá pra aposentar o serviço `nginx` daqui e plugar o host num vhost real —
-# ver deploy/nginx-prod.conf do cartao-colaborativa como referência.
+# NÃO é o mecanismo de deploy real: agora que o projeto tem domínio
+# (arsenal.cartaocolaborativa.com.br), prod/staging rodam via PM2 direto na
+# VPS, com o GitHub Actions buildando e enviando os artefatos por rsync —
+# ver deploy/README.md e .github/workflows/deploy-{prod,staging}.yml. Este
+# arquivo continua útil só pra validação local/pontual em IP:porta.
 
 services:
   db:

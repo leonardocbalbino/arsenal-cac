@@ -1,0 +1,118 @@
+name: Deploy (prod)
+
+# Build completo (API + web) roda aqui no GitHub Actions. A VPS não tem
+# acesso ao repositório git — só recebe os artefatos já prontos via rsync
+# por SSH e faz o "swap" (symlink + pm2 reload). Ver deploy/README.md.
+#
+# Mesma VPS do cartao-colaborativa, pasta e portas separadas — ver
+# deploy/README.md pra a config de nginx/PM2 completa.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+env:
+  REMOTE_BASE: /var/www/projetos/repo/arsenal-cac/prod
+  NEXT_PUBLIC_API_URL: https://arsenal.cartaocolaborativa.com.br/api
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Gerar Prisma Client
+        run: pnpm --filter cac-backend exec prisma generate
+
+      - name: Build — backend
+        run: pnpm --filter cac-backend build
+
+      - name: Rodar migrations
+        run: pnpm --filter cac-backend exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+
+      - name: Build — web
+        run: pnpm --filter cac-web build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
+
+      - name: Remover devDependencies do artefato (node_modules hoisted do workspace)
+        run: pnpm prune --prod
+
+      - name: Configurar SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Adicionar VPS aos known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.VPS_SSH_PORT || 22 }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Definir timestamp da release
+        id: ts
+        run: echo "ts=$(date +%Y%m%d%H%M%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Enviar artefatos pro VPS
+        env:
+          SSH_PORT: ${{ secrets.VPS_SSH_PORT || 22 }}
+          DEST: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}
+        run: |
+          ssh -p "$SSH_PORT" ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "mkdir -p '${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}/api' '${{ env.REMOTE_BASE }}/releases/${{ steps.ts.outputs.ts }}/web' '${{ env.REMOTE_BASE }}/shared/uploads'"
+
+          # pnpm hoisteia o node_modules na raiz do workspace (com o store em
+          # .pnpm/) e cada pacote tem seu próprio node_modules local, só com
+          # symlinks relativos apontando pra lá — os dois precisam manter a
+          # mesma profundidade relativa no destino (api/ e web/ um nível
+          # abaixo da raiz do release), senão os symlinks quebram.
+          rsync -az -e "ssh -p $SSH_PORT" node_modules package.json "$DEST/"
+
+          rsync -az -e "ssh -p $SSH_PORT" backend/node_modules "$DEST/api/"
+          rsync -az -e "ssh -p $SSH_PORT" backend/dist backend/prisma backend/package.json "$DEST/api/"
+
+          rsync -az -e "ssh -p $SSH_PORT" web/node_modules "$DEST/web/"
+          rsync -az -e "ssh -p $SSH_PORT" web/.next web/public web/package.json web/next.config.ts "$DEST/web/"
+
+      - name: Ativar release (symlink atômico + pm2 reload sem downtime)
+        env:
+          SSH_PORT: ${{ secrets.VPS_SSH_PORT || 22 }}
+        run: |
+          ssh -p "$SSH_PORT" ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s -- \
+            "${{ env.REMOTE_BASE }}" "${{ steps.ts.outputs.ts }}" <<'EOF'
+          set -euo pipefail
+          BASE="$1"; TS="$2"
+
+          # uploads (fotos/anexos) precisa sobreviver à troca de release —
+          # symlink pra fora da árvore versionada, recriado a cada deploy.
+          ln -sfn ../../../shared/uploads "$BASE/releases/$TS/api/uploads"
+
+          ln -sfn "$BASE/releases/$TS" "$BASE/current"
+
+          # ecosystem.prod.config.js fica fixo em $BASE (fora dos releases),
+          # copiado manualmente uma vez na configuração inicial da VPS —
+          # ver deploy/README.md.
+          pm2 startOrReload "$BASE/ecosystem.prod.config.js"
+          pm2 save
+
+          # mantém só as últimas releases (node_modules pesa mais, guarda menos)
+          cd "$BASE/releases" && ls -1t | tail -n +4 | xargs -r rm -rf
+          EOF

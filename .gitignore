@@ -9,3 +9,4 @@ uploads/
 ios/
 android/
 .DS_Store
+deploy/secrets*.env

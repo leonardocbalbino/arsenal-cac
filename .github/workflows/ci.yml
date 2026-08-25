@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Gerar Prisma Client
+        run: pnpm --filter cac-backend exec prisma generate
+
+      - name: Typecheck — backend
+        run: pnpm --filter cac-backend exec tsc --noEmit -p tsconfig.json
+
+      - name: Typecheck — web
+        run: pnpm --filter cac-web exec tsc --noEmit -p tsconfig.json
+
+      - name: Typecheck — mobile
+        run: pnpm --filter cac-mobile exec tsc --noEmit -p tsconfig.json
+
+      - name: Lint — web
+        run: pnpm --filter cac-web lint
+
+      - name: Build — backend
+        run: pnpm --filter cac-backend build
+
+      - name: Build — web
+        env:
+          NEXT_PUBLIC_API_URL: https://api.placeholder.invalid
+        run: pnpm --filter cac-web build
+
+  docker-build:
+    needs: build-and-typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build imagem da API (sem publicar)
+        run: docker build -f backend/Dockerfile -t arsenal-cac-api:ci .
+
+      - name: Build imagem do web (sem publicar)
+        run: docker build -f web/Dockerfile --build-arg NEXT_PUBLIC_API_URL=https://api.placeholder.invalid -t arsenal-cac-web:ci .
