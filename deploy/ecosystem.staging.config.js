@@ -52,6 +52,7 @@ module.exports = {
       cwd: '/var/www/projetos/repo/arsenal-cac/staging/current/web',
       instances: 1,
       exec_mode: 'fork',
+      interpreter: 'none',
       env: {
         NODE_ENV: 'production',
         PORT: 3111,
