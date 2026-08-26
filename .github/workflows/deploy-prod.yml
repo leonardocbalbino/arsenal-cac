@@ -17,7 +17,7 @@ concurrency:
 
 env:
   REMOTE_BASE: /var/www/projetos/repo/arsenal-cac/prod
-  NEXT_PUBLIC_API_URL: https://arsenal.cartaocolaborativa.com.br/api
+  NEXT_PUBLIC_API_URL: http://169.58.37.26:3100/api
 
 jobs:
   build-and-deploy:
